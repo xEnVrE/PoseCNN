@@ -1,0 +1,7 @@
+easydict
+opencv-python
+scipy
+transforms3d
+cython
+image
+pyyaml
