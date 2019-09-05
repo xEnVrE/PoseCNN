@@ -1,0 +1,2 @@
+sudo apt install lib-nloptdev
+ln -s <PATH>/.virtualenvs/posecnn/lib/python3.5/site-packages/tensorflow/libtensorflow_framework.so.1 <PATH>/.virtualenvs/posecnn/lib/python3.5/site-packages/tensorflow/libtensorflow_framework.so
