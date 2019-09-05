@@ -115,12 +115,12 @@ ext_modules = [
         # we're only going to use certain compiler args with nvcc and not with gcc
         # the implementation of this trick is in customize_compiler() below
         extra_compile_args={'gcc': ["-Wno-unused-function"],
-                            'nvcc': ['-arch=sm_35',
+                            'nvcc': ['-arch=sm_61',
                                      '--ptxas-options=-v',
                                      '-c',
                                      '--compiler-options',
                                      "'-fPIC'"]},
-        include_dirs = [numpy_include, CUDA['include'], '/usr/local/include/eigen3']
+        include_dirs = [numpy_include, CUDA['include'], '/home/icub/tmp_nicola/PoseCNN/lib/eigen/install/include/eigen3']
     ),
     Extension(
         "utils.cython_bbox",
@@ -144,7 +144,7 @@ ext_modules = [
         # we're only going to use certain compiler args with nvcc and not with gcc
         # the implementation of this trick is in customize_compiler() below
         extra_compile_args={'gcc': ["-Wno-unused-function"],
-                            'nvcc': ['-arch=sm_52',
+                            'nvcc': ['-arch=sm_61',
                                      '--ptxas-options=-v',
                                      '-c',
                                      '--compiler-options',
