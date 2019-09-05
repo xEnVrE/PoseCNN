@@ -29,13 +29,13 @@ typedef Eigen::ThreadPoolDevice CPUDevice;
 
 REGISTER_OP("Gradientreversal")
     .Attr("T: {float, double}")
-    .Attr("lambda: float")
+    .Attr("lmbda: float")
     .Input("bottom_data: T")
     .Output("top_data: T");
 
 REGISTER_OP("GradientreversalGrad")
     .Attr("T: {float, double}")
-    .Attr("lambda: float")
+    .Attr("lmbda: float")
     .Input("bottom_data: T")
     .Input("grad: T")
     .Output("output: T");
@@ -46,7 +46,7 @@ class GradientreversalOp : public OpKernel {
   explicit GradientreversalOp(OpKernelConstruction* context) : OpKernel(context) {
     // Get the lambda
     OP_REQUIRES_OK(context,
-                   context->GetAttr("lambda", &lambda_));
+                   context->GetAttr("lmbda", &lambda_));
     // Check that lambda is positive
     OP_REQUIRES(context, lambda_ > 0,
                 errors::InvalidArgument("Need lambda > 0, got ", lambda_));
@@ -105,7 +105,7 @@ class GradientreversalOp<Eigen::GpuDevice, T> : public OpKernel {
   {
     // Get the lambda
     OP_REQUIRES_OK(context,
-                   context->GetAttr("lambda", &lambda_));
+                   context->GetAttr("lmbda", &lambda_));
     // Check that lambda is positive
     OP_REQUIRES(context, lambda_ > 0,
                 errors::InvalidArgument("Need lambda > 0, got ", lambda_));
@@ -157,7 +157,7 @@ class GradientreversalGradOp : public OpKernel {
   {
     // Get the lambda
     OP_REQUIRES_OK(context,
-                   context->GetAttr("lambda", &lambda_));
+                   context->GetAttr("lmbda", &lambda_));
     // Check that lambda is positive
     OP_REQUIRES(context, lambda_ > 0,
                 errors::InvalidArgument("Need lambda > 0, got ", lambda_));
