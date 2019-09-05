@@ -25,6 +25,8 @@ If you find PoseCNN useful in your research, please consider citing:
 
 ### Installation
 
+0. This works with Python2.7 only
+
 1. Install [TensorFlow](https://www.tensorflow.org/get_started/os_setup). I usually compile the source code of tensorflow locally.
 
 2. Compile the new layers under $ROOT/lib we introduce in PoseCNN.
