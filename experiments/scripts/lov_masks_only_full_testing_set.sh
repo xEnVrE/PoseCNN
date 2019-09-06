@@ -19,7 +19,7 @@ fi
 time ./tools/test_net.py --gpu 0 \
   --network vgg16_convs \
   --model data/demo_models/vgg16_fcn_color_single_frame_2d_pose_add_lov_iter_160000.ckpt \
-  --imdb lov_testing_full \
+  --imdb lov_testingfull \
   --cfg experiments/cfgs/lov_color_2d_masks_only.yml \
   --rig data/LOV/camera.json \
   --cad data/LOV/models.txt \
