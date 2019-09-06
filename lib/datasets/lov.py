@@ -364,6 +364,22 @@ class lov(datasets.imdb):
 
         return image.astype(np.uint8)
 
+    def save_masks(self, labels, image_index, output):
+        class_colors = self._class_colors
+        video_id = self.image_path_at(image_index).split("/")[-2]
+        frame_id = self.image_path_at(image_index).split("/")[-1].split(".")[0].split("-")[0]
+        output_path = output + "/masks/" + video_id + "/"
+
+        height = labels.shape[0]
+        width = labels.shape[1]
+        zero_masks = np.zeros((height, width))
+
+        for i in xrange(len(class_colors)):
+            I = np.where(labels == i)
+            if I[0].size != 0 and i != 0:
+                mask = np.where(labels == i, 255, zero_masks)
+                file_name = output_path + self._classes[i] + "_" + frame_id + ".png"
+                cv2.imwrite(file_name, mask)
 
     def save_result(self, im_ind, segmentation, output_dir):
 
