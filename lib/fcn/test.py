@@ -1152,7 +1152,6 @@ def _get_bb2D(extent, pose, intrinsic_matrix):
 # test single frame
 ###################
 def test_net_single_frame(sess, net, imdb, weights_filename, model_filename):
-
     output_dir = get_output_dir(imdb, weights_filename)
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
@@ -1308,6 +1307,9 @@ def test_net_single_frame(sess, net, imdb, weights_filename, model_filename):
         im_scale = cfg.TEST.SCALES_BASE[0]
         # build the label image
         im_label = imdb.labels_to_image(im, labels)
+
+        # save masks
+        imdb.save_masks(labels, i, output_dir)
 
         poses_new = []
         poses_icp = []
