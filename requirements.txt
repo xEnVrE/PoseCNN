@@ -6,3 +6,4 @@ cython
 image
 pyyaml
 matplotlib
+tensorflow-gpu==1.15

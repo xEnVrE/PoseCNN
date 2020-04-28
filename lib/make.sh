@@ -2,6 +2,8 @@ TF_INC=$(python -c 'import tensorflow as tf; print(tf.sysconfig.get_include())')
 
 TF_LIB=$(python -c 'import tensorflow as tf; print(tf.sysconfig.get_lib())')
 
+TF_LINK=$(python -c 'import tensorflow as tf; print(tf.sysconfig.get_link_flags()[1])')
+
 CUDA_PATH=/usr/local/cuda-10.0
 
 cd hard_label_layer
@@ -10,7 +12,7 @@ nvcc -std=c++11 -c -o hard_label_op.cu.o hard_label_op_gpu.cu.cc \
 	-I $TF_INC -I$TF_INC/external/nsync/public -D GOOGLE_CUDA=1 -x cu -Xcompiler -fPIC -arch=sm_61 --expt-relaxed-constexpr
 
 g++ -std=c++11 -shared -o hard_label.so hard_label_op.cc \
-	hard_label_op.cu.o -I $TF_INC -I$TF_INC/external/nsync/public -fPIC -lcudart -lcublas -L $CUDA_PATH/lib64 -L$TF_LIB -ltensorflow_framework
+	hard_label_op.cu.o -I $TF_INC -I$TF_INC/external/nsync/public -fPIC -lcudart -lcublas -L $CUDA_PATH/lib64 -L$TF_LIB  $TF_LINK
 
 cd ..
 echo 'hard_label_layer'
@@ -21,7 +23,7 @@ nvcc -std=c++11 -c -o gradient_reversal_op.cu.o gradient_reversal_op_gpu.cu.cc \
 	-I $TF_INC -I$TF_INC/external/nsync/public -D GOOGLE_CUDA=1 -x cu -Xcompiler -fPIC -arch=sm_61 --expt-relaxed-constexpr
 
 g++ -std=c++11 -shared -o gradient_reversal.so gradient_reversal_op.cc \
-	gradient_reversal_op.cu.o -I $TF_INC -I$TF_INC/external/nsync/public -fPIC -lcudart -lcublas -L $CUDA_PATH/lib64 -L$TF_LIB -ltensorflow_framework
+	gradient_reversal_op.cu.o -I $TF_INC -I$TF_INC/external/nsync/public -fPIC -lcudart -lcublas -L $CUDA_PATH/lib64 -L$TF_LIB $TF_LINK
 
 cd ..
 echo 'gradient_reversal_layer'
@@ -32,7 +34,7 @@ nvcc -std=c++11 -c -o average_distance_loss_op_gpu.cu.o average_distance_loss_op
 	-I $TF_INC -I$TF_INC/external/nsync/public -D GOOGLE_CUDA=1 -x cu -Xcompiler -fPIC -arch=sm_61 --expt-relaxed-constexpr -DNDEBUG
 
 g++ -std=c++11 -shared -o average_distance_loss.so average_distance_loss_op.cc \
-	average_distance_loss_op_gpu.cu.o -I $TF_INC -I$TF_INC/external/nsync/public -fPIC -lcudart -L$CUDA_PATH/lib64 -L$TF_LIB -ltensorflow_framework
+	average_distance_loss_op_gpu.cu.o -I $TF_INC -I$TF_INC/external/nsync/public -fPIC -lcudart -L$CUDA_PATH/lib64 -L$TF_LIB $TF_LINK
 
 cd ..
 echo 'average_distance_loss'
@@ -43,7 +45,7 @@ nvcc -std=c++11 -c -o hough_voting_gpu_op.cu.o hough_voting_gpu_op.cu.cc \
 	-I $TF_INC -I$TF_INC/external/nsync/public -D GOOGLE_CUDA=1 -x cu -Xcompiler -fPIC -arch=sm_61 --expt-relaxed-constexpr -DNDEBUG
 
 g++ -std=c++11 -shared -o hough_voting_gpu.so hough_voting_gpu_op.cc \
-	hough_voting_gpu_op.cu.o -I $TF_INC -I$TF_INC/external/nsync/public -fPIC -lcudart -lcublas -lopencv_imgproc -lopencv_calib3d -lopencv_core -L $CUDA_PATH/lib64 -L$TF_LIB -ltensorflow_framework
+	hough_voting_gpu_op.cu.o -I $TF_INC -I$TF_INC/external/nsync/public -fPIC -lcudart -lcublas -lopencv_imgproc -lopencv_calib3d -lopencv_core -L $CUDA_PATH/lib64 -L$TF_LIB $TF_LINK
 
 cd ..
 echo 'hough_voting_gpu_layer'
@@ -56,7 +58,7 @@ g++ -std=c++11 -c -o thread_rand.o thread_rand.cpp -fPIC
 
 g++ -std=c++11 -shared -o hough_voting.so hough_voting_op.cc \
 	Hypothesis.o thread_rand.o -I $TF_INC -I$TF_INC/external/nsync/public \
-        -fPIC -lcudart -lopencv_imgproc -lopencv_calib3d -lopencv_core -lgomp -lnlopt -L $CUDA_PATH/lib64 -L$TF_LIB -ltensorflow_framework
+        -fPIC -lcudart -lopencv_imgproc -lopencv_calib3d -lopencv_core -lgomp -lnlopt -L $CUDA_PATH/lib64 -L$TF_LIB $TF_LINK
 
 cd ..
 echo 'hough_voting_layer'
@@ -67,7 +69,7 @@ nvcc -std=c++11 -c -o roi_pooling_op.cu.o roi_pooling_op_gpu.cu.cc \
 	-I $TF_INC -I$TF_INC/external/nsync/public -D GOOGLE_CUDA=1 -x cu -Xcompiler -fPIC -arch=sm_61 --expt-relaxed-constexpr
 
 g++ -std=c++11 -shared -o roi_pooling.so roi_pooling_op.cc \
-	roi_pooling_op.cu.o -I $TF_INC -I$TF_INC/external/nsync/public -fPIC -lcudart -L $CUDA_PATH/lib64 -L$TF_LIB -ltensorflow_framework
+	roi_pooling_op.cu.o -I $TF_INC -I$TF_INC/external/nsync/public -fPIC -lcudart -L $CUDA_PATH/lib64 -L$TF_LIB $TF_LINK
 cd ..
 echo 'roi_pooling_layer'
 
@@ -77,7 +79,7 @@ nvcc -std=c++11 -c -o triplet_loss_op.cu.o triplet_loss_op_gpu.cu.cc \
 	-I $TF_INC -I$TF_INC/external/nsync/public -D GOOGLE_CUDA=1 -x cu -Xcompiler -fPIC -arch=sm_61 --expt-relaxed-constexpr
 
 g++ -std=c++11 -shared -o triplet_loss.so triplet_loss_op.cc \
-	triplet_loss_op.cu.o -I $TF_INC -I$TF_INC/external/nsync/public -fPIC -lcudart -L $CUDA_PATH/lib64 -L$TF_LIB -ltensorflow_framework
+	triplet_loss_op.cu.o -I $TF_INC -I$TF_INC/external/nsync/public -fPIC -lcudart -L $CUDA_PATH/lib64 -L$TF_LIB $TF_LINK
 cd ..
 echo 'build triplet loss'
 
@@ -87,7 +89,7 @@ nvcc -std=c++11 -c -o lifted_structured_loss_op.cu.o lifted_structured_loss_op_g
 	-I $TF_INC -I$TF_INC/external/nsync/public -D GOOGLE_CUDA=1 -x cu -Xcompiler -fPIC -arch=sm_61 --expt-relaxed-constexpr
 
 g++ -std=c++11 -shared -o lifted_structured_loss.so lifted_structured_loss_op.cc \
-	lifted_structured_loss_op.cu.o -I $TF_INC -I$TF_INC/external/nsync/public -fPIC -lcudart -L $CUDA_PATH/lib64 -L$TF_LIB -ltensorflow_framework
+	lifted_structured_loss_op.cu.o -I $TF_INC -I$TF_INC/external/nsync/public -fPIC -lcudart -L $CUDA_PATH/lib64 -L$TF_LIB $TF_LINK
 cd ..
 echo 'build lifted structured loss'
 
@@ -97,7 +99,7 @@ nvcc -std=c++11 -c -o computing_flow_op.cu.o computing_flow_op_gpu.cu.cc \
 	-I $TF_INC -I$TF_INC/external/nsync/public -D GOOGLE_CUDA=1 -x cu -Xcompiler -fPIC -arch=sm_61 --expt-relaxed-constexpr
 
 g++ -std=c++11 -shared -o computing_flow.so computing_flow_op.cc \
-	computing_flow_op.cu.o -I $TF_INC -I$TF_INC/external/nsync/public -fPIC -lcudart -L $CUDA_PATH/lib64 -L$TF_LIB -ltensorflow_framework
+	computing_flow_op.cu.o -I $TF_INC -I$TF_INC/external/nsync/public -fPIC -lcudart -L $CUDA_PATH/lib64 -L$TF_LIB $TF_LINK
 cd ..
 echo 'build computing flow layer'
 
@@ -107,7 +109,7 @@ nvcc -std=c++11 -c -o backprojecting_op.cu.o backprojecting_op_gpu.cu.cc \
 	-I $TF_INC -I$TF_INC/external/nsync/public -D GOOGLE_CUDA=1 -x cu -Xcompiler -fPIC -arch=sm_61 --expt-relaxed-constexpr
 
 g++ -std=c++11 -shared -o backprojecting.so backprojecting_op.cc \
-	backprojecting_op.cu.o -I $TF_INC -I$TF_INC/external/nsync/public -fPIC -lcudart -L $CUDA_PATH/lib64 -L$TF_LIB -ltensorflow_framework
+	backprojecting_op.cu.o -I $TF_INC -I$TF_INC/external/nsync/public -fPIC -lcudart -L $CUDA_PATH/lib64 -L$TF_LIB $TF_LINK
 cd ..
 echo 'build backprojecting layer'
 
@@ -117,7 +119,7 @@ nvcc -std=c++11 -c -o projecting_op.cu.o projecting_op_gpu.cu.cc \
 	-I $TF_INC -I$TF_INC/external/nsync/public -D GOOGLE_CUDA=1 -x cu -Xcompiler -fPIC -arch=sm_61 --expt-relaxed-constexpr
 
 g++ -std=c++11 -shared -o projecting.so projecting_op.cc \
-	projecting_op.cu.o -I $TF_INC -I$TF_INC/external/nsync/public -fPIC -lcudart -L $CUDA_PATH/lib64 -L$TF_LIB -ltensorflow_framework
+	projecting_op.cu.o -I $TF_INC -I$TF_INC/external/nsync/public -fPIC -lcudart -L $CUDA_PATH/lib64 -L$TF_LIB $TF_LINK
 cd ..
 echo 'build projecting layer'
 
@@ -127,6 +129,6 @@ nvcc -std=c++11 -c -o computing_label_op.cu.o computing_label_op_gpu.cu.cc \
 	-I $TF_INC -I$TF_INC/external/nsync/public -D GOOGLE_CUDA=1 -x cu -Xcompiler -fPIC -arch=sm_61 --expt-relaxed-constexpr
 
 g++ -std=c++11 -shared -o computing_label.so computing_label_op.cc \
-	computing_label_op.cu.o -I $TF_INC -I$TF_INC/external/nsync/public -fPIC -lcudart -L $CUDA_PATH/lib64 -L$TF_LIB -ltensorflow_framework
+	computing_label_op.cu.o -I $TF_INC -I$TF_INC/external/nsync/public -fPIC -lcudart -L $CUDA_PATH/lib64 -L$TF_LIB $TF_LINK
 cd ..
 echo 'build computing label layer'
