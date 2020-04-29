@@ -59,6 +59,9 @@ def parse_args():
     parser.add_argument('--background', dest='background_name',
                         help='name of the background file',
                         default=None, type=str)
+    parser.add_argument('--output', dest='output_path',
+                        help='output_path',
+                        default=None, type=str)
 
     if len(sys.argv) == 1:
         parser.print_help()
@@ -114,7 +117,7 @@ if __name__ == '__main__':
 
     if cfg.TEST.SINGLE_FRAME:
         if cfg.TEST.SEGMENTATION:
-            test_net_single_frame(sess, network, imdb, weights_filename, args.cad_name)
+            test_net_single_frame(sess, network, imdb, weights_filename, args.cad_name, args.output_path)
         else:
             test_net_detection(sess, network, imdb, weights_filename)
     else:

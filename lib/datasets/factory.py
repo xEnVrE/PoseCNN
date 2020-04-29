@@ -20,6 +20,7 @@ import datasets.ycb_single
 import datasets.yumi
 import datasets.linemod
 import datasets.sym
+import datasets.exog
 import numpy as np
 
 # shapenet dataset
@@ -65,6 +66,13 @@ for cls in ['002_master_chef_can', '003_cracker_box', '004_sugar_box', '005_toma
         print name
         __sets[name] = (lambda cls=cls, split=split:
                 datasets.lov_single(cls, split))
+
+# lov dataset
+for split in ['dataset']:
+    name = 'exog_{}'.format(split)
+    print name
+    __sets[name] = (lambda split=split:
+            datasets.exog(split))
 
 # ycb dataset
 for split in ['trainval']:

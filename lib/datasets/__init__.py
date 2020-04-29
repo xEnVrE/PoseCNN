@@ -11,6 +11,7 @@ from .shapenet_single import shapenet_single
 from .gmu_scene import gmu_scene
 from .rgbd_scene import rgbd_scene
 from .lov import lov
+from .exog import exog
 from .lov_single import lov_single
 from .ycb import ycb
 from .ycb_single import ycb_single
