@@ -73,6 +73,12 @@ def parse_args():
 if __name__ == '__main__':
     args = parse_args()
 
+    try:
+        os.mkdir(args.output_path)
+    except OSError:
+        print("PoseCNN. Dir " + args.output_path + " already exists. Please remove it to repeat the inference process.")
+        exit(1)
+
     print('Called with args:')
     print(args)
 
